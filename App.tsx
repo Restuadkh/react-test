@@ -52,58 +52,50 @@ const Review = ({ navigation }) => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
+      backgroundColor: Colors.darker,
+      textAlign: 'center',
+      borderWidth: 0,
+      borderColor: '#fff',
+      borderRadius: 6,
+      padding: 100,
+    },
+    view: {
+      flex: 1,
+      justifyContent: 'space-around',
+      alignContent: 'center',
+      borderWidth: 0,
+      borderColor: '#ff2',
+      borderRadius: 6,
+    },
+    text: {
+      justifyContent: 'space-around',
+      alignContent: 'center',
+      color: Colors.light,
+      textAlign: 'center',
+      fontSize: 30,
+    }
+  });
   const safePadding = '5%';
   return (
-    <View style={backgroundStyle}>
-      {/* <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      /> */}
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{ paddingRight: safePadding }}>
-          <Header />
-        </View>
-        <View
-        // style={{
-        //   backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        //   paddingHorizontal: safePadding,
-        //   paddingBottom: safePadding,
-        // }}
-        >
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <Button
-            title="Go to Jane's profile"
-            onPress={() =>
-              navigation.navigate('Home')
-            }
-          />
-          {/* <LearnMoreLinks /> */}
-        </View>
-      </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.view}>
+        <Text style={styles.text}>
+          React Native Test Apps
+        </Text>
+        <Button
+          title="Start Up"
+          onPress={() =>
+            navigation.navigate('Home')
+          }
+        /></View>
     </View>
   );
+
 }
 
 const Home = () => {
@@ -121,13 +113,30 @@ const Home = () => {
 
 }
 
+const Preview = ({ route }) => {
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignContent: 'center',
+    }
+  });
+  return (
+    <View style={styles.container}>
+      <Text>Hallo Preview {route.params.name}</Text>
+    </View>
+  );
+}
 function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Review' component={Review} />
         <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Preview' component={Preview} />
       </Stack.Navigator>
     </NavigationContainer>
   );
