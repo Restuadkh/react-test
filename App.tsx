@@ -6,13 +6,18 @@
  */
 
 import * as React from 'react';
+import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View, Button, } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View, Button, Image, } from 'react-native';
 import { Colors, DebugInstructions, Header, LearnMoreLinks, ReloadInstructions, } from 'react-native/Libraries/NewAppScreen';
+import SplashScreen from 'react-native-splash-screen';
+import { Ionicons } from 'react-native-vector-icons';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -41,6 +46,16 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
         {children}
       </Text>
     </View>
+  );
+}
+
+const stackNavigation = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name='Review' component={Review} options={{ headerShown: false }}/>
+      <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='Preview' component={Preview} />
+    </Tab.Navigator>
   );
 }
 
@@ -101,8 +116,16 @@ const Review = ({ navigation }) => {
 const Home = () => {
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: 'white',
-    }
+      flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
+      backgroundColor: Colors.light,
+      textAlign: 'center',
+      borderWidth: 0,
+      borderColor: '#fff',
+      borderRadius: 6,
+      padding: 100,
+    },
   });
 
   return (
@@ -113,30 +136,78 @@ const Home = () => {
 
 }
 
-const Preview = ({ route }) => {
+const Preview = () => {
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'white',
       justifyContent: 'center',
       alignContent: 'center',
+      backgroundColor: Colors.light,
+      textAlign: 'center',
+      borderWidth: 0,
+      borderColor: '#fff',
+      borderRadius: 6,
+      padding: 20,
+    },
+    text: {
+      justifyContent: 'space-around',
+      alignContent: 'center',
+      color: Colors.dark,
+      textAlign: 'center',
+      fontSize: 30,
     }
   });
+
   return (
     <View style={styles.container}>
-      <Text>Hallo Preview {route.params.name}</Text>
+      <Text style={styles.text}>Hallo Preview</Text>
     </View>
   );
 }
+
+const Splash = ({ navigation }: { navigation: any }) => {
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+    },
+    logo: {
+      width: 150,
+      height: 150,
+      resizeMode: 'contain',
+    },
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      // SplashScreen.hide();
+      navigation.replace('stackNavigation'); // Ganti dengan nama layar utama Anda
+    }, 2000); // Durasi splash screen (2 detik)
+  }, [navigation]);
+
+  return (
+    <View style={styles.container}>
+      <Image source={require('./assets/splash.png')} style={styles.logo} />
+    </View>
+  );
+};
+
+
 function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Review' component={Review} />
-        <Stack.Screen name='Home' component={Home} />
-        <Stack.Screen name='Preview' component={Preview} />
+        {/* <Stack.Screen name='stackNavigation' component={stackNavigation} options={{ headerShown: false }} /> */}
+        <Stack.Screen name='Splash' component={Splash} />
+        {/* <Stack.Screen name='Review' component={Review} /> */}
+        <Stack.Screen name='stackNavigation' component={stackNavigation} />
+        {/* <Stack.Screen name='Home' component={Home} /> */}
+        {/* <Stack.Screen name='Preview' component={Preview} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
